@@ -1,0 +1,123 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: twistlock
+  labels:
+    name: twistlock
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: twistlock-secrets-win
+  namespace: twistlock
+type: Opaque
+data:
+  PCC_URL: COMPUTE CONSOLE URL base64 encoded with Windows
+  PCC_USER: USER or ACCESS KEY base64 encoded with Windows
+  PCC_PASS: USER or SECRET KEY base64 encoded with Windows
+  PCC_SAN: COMPUTE CONSOLE FQDN base64 encoded with Windows
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: twistlock-script-win
+  namespace: twistlock
+type: Opaque
+data:
+  defender-install.ps1: IHBhcmFtICgNCiAgICBbUGFyYW1ldGVyKE1hbmRhdG9yeT0kZmFsc2UpXVtzdHJpbmddJHR5cGU9ImNvbnRhaW5lcmRXaW5kb3dzIiwNCiAgICBbUGFyYW1ldGVyKE1hbmRhdG9yeT0kZmFsc2UpXVtzdHJpbmddJHdzUG9ydD0iNDQzIiwNCiAgICBbUGFyYW1ldGVyKE1hbmRhdG9yeT0kZmFsc2UpXVtzdHJpbmddJGNvbnNvbGVDTj0kKGNhdCAiQzpcaHBjXHNlY3JldHNcUENDX1NBTiIpLA0KICAgIFtQYXJhbWV0ZXIoTWFuZGF0b3J5PSRmYWxzZSldW3N0cmluZ10kYXBpQWRkcmVzcz0kKGNhdCAiQzpcaHBjXHNlY3JldHNcUENDX1VSTCIpLA0KICAgIFtQYXJhbWV0ZXIoTWFuZGF0b3J5PSRmYWxzZSldW3N0cmluZ10kY29tcHV0ZVVzZXI9JChjYXQgIkM6XGhwY1xzZWNyZXRzXFBDQ19VU0VSIiksDQogICAgW1BhcmFtZXRlcihNYW5kYXRvcnk9JGZhbHNlKV1bc3RyaW5nXSRjb21wdXRlUGFzc3dvcmQ9JChjYXQgIkM6XGhwY1xzZWNyZXRzXFBDQ19QQVNTIiksDQogICAgW1BhcmFtZXRlcihNYW5kYXRvcnk9JGZhbHNlKV1bc3RyaW5nXSRsYWJlbD0idHdpc3Rsb2NrL25vZGUtY29uZmlndXJlZD10cnVlIg0KICkNCg0KJEJvZHkgPSBAew0KICAgIHVzZXJuYW1lID0gIiRjb21wdXRlVXNlciINCiAgICBwYXNzd29yZCA9ICIkY29tcHV0ZVBhc3N3b3JkIg0KfQ0KDQokdG9rZW4gPSAoSW52b2tlLVJlc3RNZXRob2QgLU1ldGhvZCAnUG9zdCcgLVVyaSAkYXBpQWRkcmVzcy9hcGkvdjEvYXV0aGVudGljYXRlIC1Cb2R5ICgkQm9keSB8IENvbnZlcnRUby1Kc29uKSAtQ29udGVudFR5cGUgJ2FwcGxpY2F0aW9uL2pzb24nKS50b2tlbg0KDQokcGFyYW1ldGVycyA9IEB7IA0KICAgIFVyaSA9ICIkYXBpQWRkcmVzcy9hcGkvdjEvc2NyaXB0cy9kZWZlbmRlci5wczEiDQogICAgTWV0aG9kID0gIlBvc3QiDQogICAgSGVhZGVycyA9IEB7DQogICAgICAgICJhdXRob3JpemF0aW9uIiA9ICJCZWFyZXIgJHRva2VuIiANCiAgICB9IA0KICAgIE91dEZpbGUgPSAiZGVmZW5kZXIucHMxIiANCn0NCg0KSW52b2tlLVdlYlJlcXVlc3QgQHBhcmFtZXRlcnMNCi5cZGVmZW5kZXIucHMxIC10eXBlICR0eXBlIC1jb25zb2xlQ04gJGNvbnNvbGVDTiAtd3NQb3J0ICR3c1BvcnQgLWluc3RhbGwgLXUgLXYgDQoNCiMgTGFiZWwgQ3VycmVudCBOb2RlDQplY2hvICIkKEdldC1EYXRlKTogRG93bmxvYWRpbmcga3ViZWN0bCINCmN1cmwuZXhlIC1zIC1MTyAiaHR0cHM6Ly9kbC5rOHMuaW8vcmVsZWFzZS92MS4zMS4wL2Jpbi93aW5kb3dzL2FtZDY0L2t1YmVjdGwuZXhlIg0KZWNobyAiJChHZXQtRGF0ZSk6IExhYmVsaW5nIE5vZGUgJGVudjpOT0RFX05BTUUiDQplY2hvICIkKEdldC1EYXRlKTogJCguXGt1YmVjdGwgbGFiZWwgbm9kZSAkZW52Ok5PREVfTkFNRSAkbGFiZWwpIg==
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: twistlock-service-win
+  namespace: twistlock
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: twistlock-clusterrole-win
+rules:
+- apiGroups:
+  - ""
+  resources:
+  - nodes
+  verbs:
+  - get
+  - patch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: twistlock-clusterrolebinding-win
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: twistlock-clusterrole-win
+subjects:
+- kind: ServiceAccount
+  name: twistlock-service-win
+  namespace: twistlock
+---
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: twistlock-defender-ds-win
+  namespace: twistlock
+spec:
+  selector:
+    matchLabels:
+      app: twistlock-defender-ds-win
+  template:
+    metadata:
+      labels:
+        app: twistlock-defender-ds-win
+    spec:
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: twistlock/node-configured
+                operator: DoesNotExist
+      nodeSelector:
+        "kubernetes.io/os": windows
+      serviceAccount: twistlock-service-win
+      securityContext:
+        seccompProfile:
+          type: RuntimeDefault
+        windowsOptions:
+          hostProcess: true
+      hostNetwork: true
+      # Container used to install the Windows Container Defender on Windows Nodes
+      containers:
+      - name: defender-install
+        image: mcr.microsoft.com/windows/nanoserver:ltsc2022
+        securityContext:
+          allowPrivilegeEscalation: false
+          runAsNonRoot: true
+          windowsOptions:
+            runAsUserName: "NT AUTHORITY\\System"
+          capabilities:
+            drop:
+            - ALL
+        command:
+        - copy C:\hpc\config\defender-install.ps1 defender-install.ps1 &&
+        - powershell
+        - defender-install.ps1
+        volumeMounts:
+        - name: twistlock-script-win
+          mountPath: "C:\\hpc\\config"
+        - name: twistlock-secrets-win
+          mountPath: "C:\\hpc\\secrets"
+        env:
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+      volumes:
+      - name: twistlock-script-win
+        secret:
+          secretName: twistlock-script-win
+      - name: twistlock-secrets-win
+        secret:
+          secretName: twistlock-secrets-win
