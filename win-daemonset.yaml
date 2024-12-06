@@ -81,6 +81,11 @@ spec:
                 operator: DoesNotExist
       nodeSelector:
         "kubernetes.io/os": windows
+      tolerations:
+      - effect: NoSchedule
+        key: node.kubernetes.io/os
+        operator: Equal
+        value: windows
       serviceAccount: twistlock-service-win
       securityContext:
         seccompProfile:
